@@ -1,0 +1,199 @@
+{
+  "_doc": "Registry of every repository owned by this account. clone.sh reads this and nothing else — adding a repo here is the only edit needed for it to show up in `./clone.sh --list`, be clonable, and get a symlink. Deliberately NOT submodules: a submodule pins a commit, and this is an index of working clones, not a pinned build input. cloud-master carries a SUBSET of these entries — the cloud project — with identical name/url/private fields; this file is the superset and the two must not disagree.",
+  "_schema": "cloud-repos/v1",
+  "base_dir_doc": "Where clones live. Override with $CLOUD_GIT_BASE; otherwise ~/git. Clones are NEVER placed inside this repo — repo_master holds relative symlinks (../../<name> from a group directory) pointing out to them, committed, so `ls <group>/` is the inventory and a dangling link is just a repo you have not cloned yet.",
+  "base_dir_default": "~/git",
+  "_visibility_doc": "`private` mirrors GitHub visibility as of 2026-08-11 and only drives the \"(private)\" hint in `--list` plus a clearer message when a clone fails for lack of credentials. It grants nothing.",
+  "groups": {
+    "2_vault": "Secrets (sops/age) — every credential the fleet uses. Numbered so it sorts ahead of the lettered groups: it is the one repo whose absence breaks the others.",
+    "a_cloud": "The cloud project — infrastructure, services, data, front-end, and the tooling built for it.",
+    "b_data_science": "Machine-learning and data-science work.",
+    "y_others": "Everything else — coursework, experiments, forks, personal. Sorts last by design."
+  },
+  "repos": [
+    {
+      "name": "vault",
+      "group": "2_vault",
+      "url": "git@github.com:diegonmarcos/vault.git",
+      "private": true,
+      "doc": "Secrets (sops/age). Every credential the fleet uses."
+    },
+    {
+      "name": "cloud",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/cloud.git",
+      "private": false,
+      "doc": "Fleet: services, infra, the derive engine (1_cloud-configs)."
+    },
+    {
+      "name": "cloud-android",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/cloud-android.git",
+      "private": false,
+      "doc": "Android client."
+    },
+    {
+      "name": "cloud-data",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/cloud-data.git",
+      "private": true,
+      "doc": "Generated fleet config consumed by cloud's services."
+    },
+    {
+      "name": "cloud-data-lfs",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/cloud-data-lfs.git",
+      "private": true,
+      "doc": "Large binary artefacts (git-lfs) for cloud-data."
+    },
+    {
+      "name": "front",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/diegonmarcos.github.io.git",
+      "private": false,
+      "doc": "Front-end: the published site and its derive job (1_front-configs). Cloned as 'front', not after its repo name — 112 files across unix and cloud reference ~/git/front, and it matches its siblings front-data/front-assets-cdn."
+    },
+    {
+      "name": "front-asset-cdn",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/front-asset-cdn.git",
+      "private": true,
+      "doc": "Predecessor of front-assets-cdn; kept for history."
+    },
+    {
+      "name": "front-assets-cdn",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/front-assets-cdn.git",
+      "private": false,
+      "doc": "Front-end static assets served from the CDN."
+    },
+    {
+      "name": "front-data",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/front-data.git",
+      "private": false,
+      "doc": "Front-end content and data."
+    },
+    {
+      "name": "front-galaxy-gaia",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/front-galaxy-gaia.git",
+      "private": true,
+      "doc": "Front-end experiment."
+    },
+    {
+      "name": "tools",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/tools.git",
+      "private": false,
+      "doc": "DevOps toolkit — operational scripts and dashboards."
+    },
+    {
+      "name": "unix",
+      "group": "a_cloud",
+      "url": "git@github.com:diegonmarcos/unix.git",
+      "private": false,
+      "doc": "Workstation + device configuration, nix flakes, the superapp. Holds the Claude SoT (da_my-ai/src/data/claude)."
+    },
+    {
+      "name": "ml-Agentic",
+      "group": "b_data_science",
+      "url": "git@github.com:diegonmarcos/ml-Agentic.git",
+      "private": false,
+      "doc": "Agentic-systems study and experiments."
+    },
+    {
+      "name": "ml-DataScience",
+      "group": "b_data_science",
+      "url": "git@github.com:diegonmarcos/ml-DataScience.git",
+      "private": false,
+      "doc": "Data-science coursework and notebooks."
+    },
+    {
+      "name": "ml-MachineLearning",
+      "group": "b_data_science",
+      "url": "git@github.com:diegonmarcos/ml-MachineLearning.git",
+      "private": false,
+      "doc": "Machine-learning coursework and models."
+    },
+    {
+      "name": "back-Algo",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/back-Algo.git",
+      "private": false,
+      "doc": "Algorithms practice."
+    },
+    {
+      "name": "back-Graphic",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/back-Graphic.git",
+      "private": false,
+      "doc": "Graphics programming."
+    },
+    {
+      "name": "back-System",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/back-System.git",
+      "private": false,
+      "doc": "Systems programming."
+    },
+    {
+      "name": "cyber-Cyberwarfare",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/cyber-Cyberwarfare.git",
+      "private": false,
+      "doc": "Security study."
+    },
+    {
+      "name": "dev",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/dev.git",
+      "private": true,
+      "doc": "Scratch/dev workspace."
+    },
+    {
+      "name": "diegonmarcos",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/diegonmarcos.git",
+      "private": false,
+      "doc": "GitHub profile README repo."
+    },
+    {
+      "name": "FairEmail",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/FairEmail.git",
+      "private": false,
+      "fork": true,
+      "doc": "Fork of the FairEmail Android client."
+    },
+    {
+      "name": "lecole42",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/lecole42.git",
+      "private": true,
+      "doc": "42 school coursework."
+    },
+    {
+      "name": "notes",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/notes.git",
+      "private": true,
+      "doc": "Personal notes (Obsidian vault)."
+    },
+    {
+      "name": "octocode",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/octocode.git",
+      "private": false,
+      "fork": true,
+      "doc": "Fork — code-intelligence tooling."
+    },
+    {
+      "name": "ops-Mylibs",
+      "group": "y_others",
+      "url": "git@github.com:diegonmarcos/ops-Mylibs.git",
+      "private": false,
+      "doc": "Personal shared libraries."
+    }
+  ]
+}
