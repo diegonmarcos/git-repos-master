@@ -12,16 +12,16 @@
   },
   "repos": [
     {
-      "name": "vault",
+      "name": "cloud-vault",
       "group": "2_vault",
-      "url": "git@github.com:diegonmarcos/vault.git",
+      "url": "git@github.com:diegonmarcos/cloud-vault.git",
       "private": true,
       "doc": "Secrets (sops/age). Every credential the fleet uses."
     },
     {
-      "name": "cloud",
+      "name": "cloud-infra",
       "group": "a_cloud",
-      "url": "git@github.com:diegonmarcos/cloud.git",
+      "url": "git@github.com:diegonmarcos/cloud-infra.git",
       "private": false,
       "doc": "Fleet: services, infra, the derive engine (1_cloud-configs)."
     },
@@ -82,118 +82,33 @@
       "doc": "Front-end experiment."
     },
     {
-      "name": "tools",
+      "name": "cloud-mykonsole-dtk",
       "group": "a_cloud",
-      "url": "git@github.com:diegonmarcos/tools.git",
+      "url": "git@github.com:diegonmarcos/cloud-mykonsole-dtk.git",
       "private": false,
       "doc": "DevOps toolkit — operational scripts and dashboards."
     },
     {
-      "name": "unix",
+      "name": "cloud-unix",
       "group": "a_cloud",
-      "url": "git@github.com:diegonmarcos/unix.git",
+      "url": "git@github.com:diegonmarcos/cloud-unix.git",
       "private": false,
       "doc": "Workstation + device configuration, nix flakes, the superapp. Holds the Claude SoT (da_my-ai/src/data/claude)."
     },
     {
-      "name": "ml-Agentic",
-      "group": "b_data_science",
-      "url": "git@github.com:diegonmarcos/ml-Agentic.git",
-      "private": false,
-      "doc": "Agentic-systems study and experiments."
-    },
-    {
-      "name": "ml-DataScience",
-      "group": "b_data_science",
-      "url": "git@github.com:diegonmarcos/ml-DataScience.git",
-      "private": false,
-      "doc": "Data-science coursework and notebooks."
-    },
-    {
-      "name": "ml-MachineLearning",
-      "group": "b_data_science",
-      "url": "git@github.com:diegonmarcos/ml-MachineLearning.git",
-      "private": false,
-      "doc": "Machine-learning coursework and models."
-    },
-    {
-      "name": "back-Algo",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/back-Algo.git",
-      "private": false,
-      "doc": "Algorithms practice."
-    },
-    {
-      "name": "back-Graphic",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/back-Graphic.git",
-      "private": false,
-      "doc": "Graphics programming."
-    },
-    {
-      "name": "back-System",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/back-System.git",
-      "private": false,
-      "doc": "Systems programming."
-    },
-    {
-      "name": "cyber-Cyberwarfare",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/cyber-Cyberwarfare.git",
-      "private": false,
-      "doc": "Security study."
-    },
-    {
-      "name": "dev",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/dev.git",
-      "private": true,
-      "doc": "Scratch/dev workspace."
-    },
-    {
-      "name": "diegonmarcos",
+      "name": "gh-profile-diegonmarcos",
       "group": "y_others",
       "url": "git@github.com:diegonmarcos/diegonmarcos.git",
       "private": false,
       "doc": "GitHub profile README repo."
     },
     {
-      "name": "FairEmail",
+      "name": "cloud-notes",
       "group": "y_others",
-      "url": "git@github.com:diegonmarcos/FairEmail.git",
-      "private": false,
-      "fork": true,
-      "doc": "Fork of the FairEmail Android client."
-    },
-    {
-      "name": "lecole42",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/lecole42.git",
-      "private": true,
-      "doc": "42 school coursework."
-    },
-    {
-      "name": "notes",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/notes.git",
+      "url": "git@github.com:diegonmarcos/cloud-notes.git",
       "private": true,
       "doc": "Personal notes (Obsidian vault)."
-    },
-    {
-      "name": "octocode",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/octocode.git",
-      "private": false,
-      "fork": true,
-      "doc": "Fork — code-intelligence tooling."
-    },
-    {
-      "name": "ops-Mylibs",
-      "group": "y_others",
-      "url": "git@github.com:diegonmarcos/ops-Mylibs.git",
-      "private": false,
-      "doc": "Personal shared libraries."
     }
-  ]
+  ],
+  "_archived_doc": "10 dormant repos (coursework, experiments) were moved to ~/git/lecole-42/ and deregistered here on 2026-08-18; they still exist on GitHub. FairEmail and octocode forks were deleted on GitHub the same day - FairEmail was fully reproduced by unix/ea_cloud-mail/patches, octocode was 0 commits ahead of Muvon/octocode."
 }
