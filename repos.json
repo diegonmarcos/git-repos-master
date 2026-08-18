@@ -54,11 +54,11 @@
       "doc": "Front-end: the published site and its derive job (1_front-configs). Cloned as 'front', not after its repo name — 112 files across unix and cloud reference ~/git/front, and it matches its siblings front-data/front-assets-cdn."
     },
     {
-      "name": "front-asset-cdn",
+      "name": "front-unity",
       "group": "a_cloud",
-      "url": "git@github.com:diegonmarcos/front-asset-cdn.git",
+      "url": "git@github.com:diegonmarcos/front-unity.git",
       "private": true,
-      "doc": "Predecessor of front-assets-cdn; kept for history."
+      "doc": "Unity asset pipeline (unity-asset-vm: upkg2gltf, fetch-and-convert) plus its assets. Was front-asset-cdn, the predecessor of front-assets-cdn; renamed 2026-08-18 to match what it actually holds - the CDN itself is front-assets-cdn."
     },
     {
       "name": "front-assets-cdn",
