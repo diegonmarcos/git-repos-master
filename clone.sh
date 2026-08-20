@@ -72,6 +72,10 @@ link_one() {
     _n="$1"; _g=$(_field "$_n" group); _pp=$(_path "$_n")
     _p=$(_linkpath "$_n" "$_g")
     mkdir -p "$(dirname "$_p")"
+    # Not cloned here -> no link. A group dir may legitimately be empty on a
+    # given machine (galaxy indexes d_lecole but does not carry the coursework),
+    # and a dangling link is worse than an absent one: it looks like breakage.
+    if [ ! -d "$BASE/$_pp" ]; then rm -f "$_p"; return 0; fi
     # -n so relinking an existing link replaces it instead of nesting inside it.
     ln -sfn "$(_linktarget "$_pp" "$_g")" "$_p"
     return 0
