@@ -13,8 +13,8 @@
 # This repo is an INDEX, not a container. Clones live outside it (in
 # $CLOUD_GIT_BASE, default ~/git) and appear here as symlinks:
 #
-#     cloud-master/unix          ->  ~/git/cloud-unix          (no group)
-#     cloud-master/2_vault/vault ->  ~/git/cloud-vault         (grouped)
+#     repo-master/a_cloud/cloud-unix ->  ~/git/cloud-unix
+#     repo-master/d_lecole/back-Algo ->  ~/git/lecole-42/back-Algo   (`path`)
 #
 # Every repo in the registry has a link, committed, whether or not you have
 # cloned it. A link to a repo you do not have dangles — that is the index
@@ -45,12 +45,19 @@ _field() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1
 # string, which word-splitting would drop from the loop entirely — so it is
 # emitted as the sentinel "." and translated back at the point of use.
 _groups() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write([...new Set(r.repos.map(x=>x.group||"."))].sort().join(" "))' "$REGISTRY"; }
+# Where the clone actually lives under $BASE. Defaults to the repo name; the
+# d_lecole entries override it because those clones sit in ~/git/lecole-42/.
+# Without this the only way to index them would be to move them, which is a
+# separate decision from indexing them.
+_path() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));const e=r.repos.find(x=>x.name===process.argv[2]);process.stdout.write(e&&e.path?e.path:process.argv[2])' "$REGISTRY" "$1"; }
 
 # An entry with no `group` links at the ROOT of this repo; one with a group
 # links inside that directory. Depth follows: ../ from the root, ../../ from a
 # group. Getting that wrong does not fail loudly — it produces a link that
 # resolves somewhere plausible and wrong.
 _linkpath() { [ -n "$2" ] && printf '%s/%s/%s' "$SCRIPT_DIR" "$2" "$1" || printf '%s/%s' "$SCRIPT_DIR" "$1"; }
+# $1 is the PATH under $BASE, not the name — they differ whenever an entry sets
+# `path`, and using the name there yields a link that dangles silently.
 _linktarget() { [ -n "$2" ] && printf '../../%s' "$1" || printf '../%s' "$1"; }
 
 # The links are RELATIVE and COMMITTED.
@@ -62,16 +69,16 @@ _linktarget() { [ -n "$2" ] && printf '../../%s' "$1" || printf '../%s' "$1"; }
 # siblings anywhere ($CLOUD_GIT_BASE, ~/git, /srv, a container) and every link
 # resolves.
 link_one() {
-    _n="$1"; _g=$(_field "$_n" group)
+    _n="$1"; _g=$(_field "$_n" group); _pp=$(_path "$_n")
     _p=$(_linkpath "$_n" "$_g")
     mkdir -p "$(dirname "$_p")"
     # -n so relinking an existing link replaces it instead of nesting inside it.
-    ln -sfn "$(_linktarget "$_n" "$_g")" "$_p"
+    ln -sfn "$(_linktarget "$_pp" "$_g")" "$_p"
     return 0
 }
 
 clone_one() {
-    _n="$1"; _u=$(_field "$_n" url); _t="$BASE/$_n"
+    _n="$1"; _u=$(_field "$_n" url); _t="$BASE/$(_path "$_n")"
     if [ -d "$_t/.git" ]; then
         printf "  = %-24s already cloned at %s\n" "$_n" "$_t"
     else
@@ -94,7 +101,7 @@ do_list() {
         [ -n "$g" ] && printf "%s/\n" "$g" || printf "./  (repo root)\n"
         for n in $(_names); do
             [ "$(_field "$n" group)" = "$g" ] || continue
-            if [ -d "$BASE/$n/.git" ]; then
+            if [ -d "$BASE/$(_path "$n")/.git" ]; then
                 [ -L "$(_linkpath "$n" "$g")" ] && s="cloned + linked" || s="cloned, NOT linked (run --link)"
             else
                 s="not cloned"
@@ -118,7 +125,7 @@ case "${1:-}" in
         # other change.
         for n in $(_names); do
             g=$(_field "$n" group)
-            link_one "$n" && printf "  > %-24s %s -> %s\n" "$n" "${g:+$g/}$n" "$(_linktarget "$n" "$g")"
+            link_one "$n" && printf "  > %-24s %s -> %s\n" "$n" "${g:+$g/}$n" "$(_linktarget "$(_path "$n")" "$g")"
         done
         ;;
     --all)
