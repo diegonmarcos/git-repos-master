@@ -11,7 +11,7 @@
 
   "_path_doc": "`path` is where the clone actually sits under base_dir; it defaults to `name`. Only the d_lecole entries set it, because those ten were moved into ~/git/lecole-42/ on 2026-08-18 to keep the root of ~/git legible. Indexing them and moving them are separate decisions: `path` lets this file describe where they are instead of demanding they move back.",
 
-  "_archived_doc": "FairEmail and octocode forks were deleted on GitHub on 2026-08-18 — FairEmail was fully reproduced by unix/ea_cloud-mail/patches, octocode was 0 commits ahead of Muvon/octocode. Nothing else has been archived. The ten d_lecole repos were deregistered the same day and are registered again as of 2026-08-20; they were never gone, only unindexed.",
+  "_archived_doc": "FairEmail and octocode forks were deleted on GitHub on 2026-08-18 — FairEmail was fully reproduced by unix/aa_cloud-mail/patches, octocode was 0 commits ahead of Muvon/octocode. Nothing else has been archived. The ten d_lecole repos were deregistered the same day and are registered again as of 2026-08-20; they were never gone, only unindexed.",
 
   "groups": {
     "2_vault": "Secrets (sops/age) — every credential the fleet uses. Numbered so it sorts ahead of the lettered groups: it is the one repo whose absence breaks the others.",
