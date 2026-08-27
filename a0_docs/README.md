@@ -59,7 +59,7 @@ this is the former.
 
 The links are **relative** (`../../<name>` from a group directory) and
 **committed**. Absolute would not survive the trip: git stores a symlink's
-target verbatim, so a committed `/home/diego/git/cloud-unix` resolves on exactly one
+target verbatim, so a committed `/home/diego/git/cloud-infra-desktop` resolves on exactly one
 machine and dangles everywhere else — the same failure `.mcp.json` had as a
 link to `/home/diego/.mcp.json`. Relative has no such dependency: clone the
 repos as siblings anywhere (`$CLOUD_GIT_BASE`, `~/git`, `/srv`, a container)

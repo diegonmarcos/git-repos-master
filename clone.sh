@@ -13,7 +13,7 @@
 # This repo is an INDEX, not a container. Clones live outside it (in
 # $CLOUD_GIT_BASE, default ~/git) and appear here as symlinks:
 #
-#     repo-master/a_cloud/cloud-unix ->  ~/git/cloud-unix
+#     repo-master/a_cloud/cloud-infra-desktop ->  ~/git/cloud-infra-desktop
 #     repo-master/d_lecole/back-Algo ->  ~/git/lecole-42/back-Algo   (`path`)
 #
 # Every repo in the registry has a link, committed, whether or not you have
@@ -63,7 +63,7 @@ _linktarget() { [ -n "$2" ] && printf '../../%s' "$1" || printf '../%s' "$1"; }
 # The links are RELATIVE and COMMITTED.
 #
 # Absolute would not survive the trip. Git stores a symlink's target verbatim,
-# so a committed /home/diego/git/cloud-unix resolves on exactly one machine and
+# so a committed /home/diego/git/cloud-infra-desktop resolves on exactly one machine and
 # dangles everywhere else — the same failure .mcp.json had as a link to
 # /home/diego/.mcp.json. Relative has no such dependency: clone the repos as
 # siblings anywhere ($CLOUD_GIT_BASE, ~/git, /srv, a container) and every link
