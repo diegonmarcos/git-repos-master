@@ -41,7 +41,7 @@
       "doc": "Generated fleet config consumed by cloud's services." },
     { "name": "cloud-data-lfs", "group": "a_cloud", "url": "git@github.com:diegonmarcos/cloud-data-lfs.git", "private": true,
       "doc": "Large binary artefacts (git-lfs) for cloud-data." },
-    { "name": "cloud-my-ai_memory", "group": "a_cloud", "url": "git@github.com:diegonmarcos/my-ai_memory.git", "private": true,
+    { "name": "cloud-data-my-ai-memory", "group": "a_cloud", "url": "git@github.com:diegonmarcos/cloud-data-my-ai-memory.git", "private": true,
       "doc": "Claude Code's durable state and the source it runs from. ~/.claude symlinks in, not out: a_sessions/<instance>/ holds transcripts, file-history, shell-snapshots and history.jsonl; b_projects/ holds MEMORY.md and memory-entries; a_commits/ snapshots every commit object of every repo here." },
     { "name": "cloud-notes", "group": "a_cloud", "url": "git@github.com:diegonmarcos/cloud-notes.git", "private": true,
       "doc": "Personal notes (Obsidian vault)." },

@@ -72,10 +72,20 @@ link_one() {
     _n="$1"; _g=$(_field "$_n" group); _pp=$(_path "$_n")
     _p=$(_linkpath "$_n" "$_g")
     mkdir -p "$(dirname "$_p")"
-    # Not cloned here -> no link. A group dir may legitimately be empty on a
-    # given machine (galaxy indexes d_lecole but does not carry the coursework),
-    # and a dangling link is worse than an absent one: it looks like breakage.
-    if [ ! -d "$BASE/$_pp" ]; then rm -f "$_p"; return 0; fi
+    # The link is written from the REGISTRY, never from what happens to be on
+    # disk: every entry gets a link, committed, whether or not this machine
+    # has the clone. A link to a repo you do not have dangles, and that is the
+    # index working -- `ls` is the project and the broken entries are your
+    # to-clone list. See the header, and cloud/clone.sh, which never had this.
+    #
+    # This used to `rm -f "$_p"` when the clone was absent. The links are
+    # TRACKED, so --relink on any machine with a partial checkout staged
+    # deletions of the links every other machine depends on, and a single
+    # `git commit -a` propagated them to everyone; it silently removed
+    # b_front/ffront and c_gh/gh-profile-diegonmarcos during the 2026-08-27
+    # migration. Deleting a committed file because of local state is not a
+    # relink -- and an empty group dir is precisely the to-clone list the
+    # header promises, not breakage.
     # -n so relinking an existing link replaces it instead of nesting inside it.
     ln -sfn "$(_linktarget "$_pp" "$_g")" "$_p"
     return 0
