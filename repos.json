@@ -46,10 +46,10 @@
     { "name": "cloud-notes", "group": "a_cloud", "url": "git@github.com:diegonmarcos/cloud-notes.git", "private": true,
       "doc": "Personal notes (Obsidian vault)." },
 
-    { "name": "ffront", "group": "b_front", "url": "git@github.com:diegonmarcos/ffront.git", "private": false,
-      "doc": "Project master for the front-end: its own repos.json plus committed symlinks to the five front repos. Unindexed until 2026-08-20." },
-    { "name": "front", "group": "b_front", "url": "git@github.com:diegonmarcos/diegonmarcos.github.io.git", "private": false,
-      "doc": "Front-end: the published site and its derive job (1_front-configs). Cloned as 'front', not after its repo name — 112 files across unix and cloud reference ~/git/front, and it matches its siblings front-data/front-assets-cdn." },
+    { "name": "front", "group": "b_front", "url": "git@github.com:diegonmarcos/ffront.git", "private": false,
+      "doc": "Project master for the front-end: its own repos.json plus committed symlinks to the front repos. Cloned as the bare 'front' (repo name is ffront) so ~/git/front/<member> resolves through the farm — which is what the ~/git/front/front-data/... paths in cloud-infra already assume." },
+    { "name": "front-diegonmarcos", "group": "b_front", "url": "git@github.com:diegonmarcos/diegonmarcos.github.io.git", "private": false,
+      "doc": "Front-end: the published site and its derive job (1_front-configs). Cloned as 'front-diegonmarcos', not after its repo name (diegonmarcos.github.io) — every front member is front-<thing>, and the bare 'front' now belongs to the project master, exactly as 'cloud' does for a_cloud." },
     { "name": "front-assets-cdn", "group": "b_front", "url": "git@github.com:diegonmarcos/front-assets-cdn.git", "private": false,
       "doc": "Front-end static assets served from the CDN." },
     { "name": "front-data", "group": "b_front", "url": "git@github.com:diegonmarcos/front-data.git", "private": false,
@@ -59,8 +59,8 @@
     { "name": "front-unity", "group": "b_front", "url": "git@github.com:diegonmarcos/front-unity.git", "private": true,
       "doc": "Unity asset pipeline (unity-asset-vm: upkg2gltf, fetch-and-convert) plus its assets. Was front-asset-cdn, the predecessor of front-assets-cdn; renamed 2026-08-18 to match what it actually holds - the CDN itself is front-assets-cdn." },
 
-    { "name": "gh-profile-diegonmarcos", "group": "c_gh", "url": "git@github.com:diegonmarcos/diegonmarcos.git", "private": false,
-      "doc": "GitHub profile README repo. Cloned under a descriptive name because 'diegonmarcos' at the root of ~/git says nothing about what it is." },
+    { "name": "front-gh-profile-diegonmarcos", "group": "c_gh", "url": "git@github.com:diegonmarcos/diegonmarcos.git", "private": false,
+      "doc": "GitHub profile README repo (diegonmarcos). Cloned under a descriptive front-* name because 'diegonmarcos' at the root of ~/git says nothing about what it is." },
 
     { "name": "lecole42", "group": "d_lecole", "path": "lecole-42/lecole42", "url": "git@github.com:diegonmarcos/lecole42.git", "private": true,
       "doc": "The 42 curriculum itself." },
