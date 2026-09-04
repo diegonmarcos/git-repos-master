@@ -30,4 +30,16 @@ cd "$REPO"
 ./clone.sh --all || true
 ./clone.sh --link >/dev/null 2>&1 || true
 
-echo "[session-start] fleet cloned under $CLOUD_GIT_BASE"
+# Push the fleet-shared files (repos.json `fleet_files`) out to every clone that
+# has the module they belong to. A container assembles its fleet from whatever
+# the anonymous lane served, so the copies it just cloned are only as fresh as
+# each repo's last hand-sync — which is exactly how deploy-dotfiles.sh came to
+# be missing in four repos and stale in a fifth, and how .mcp.json drifted
+# between cloud and cloud-vault.
+#
+# Copies only on difference, so this is a no-op that dirties nothing when the
+# fleet is already consistent. Non-fatal: a partial clone should still get every
+# shared file whose source it does have.
+./clone.sh --sync || true
+
+echo "[session-start] fleet cloned and synced under $CLOUD_GIT_BASE"

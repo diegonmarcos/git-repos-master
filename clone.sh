@@ -8,6 +8,7 @@
 # ║   ./clone.sh --group <g>    clone one group                      ║
 # ║   ./clone.sh --link         relink whatever is already cloned    ║
 # ║   ./clone.sh --relink       rewrite every link from the registry ║
+# ║   ./clone.sh --sync         push fleet-shared files to all repos ║
 # ╚══════════════════════════════════════════════════════════════════╝
 #
 # This repo is an INDEX, not a container. Clones live outside it (in
@@ -128,6 +129,75 @@ do_list() {
     printf "clone with:  ./clone.sh <name>...  |  --group <g>  |  --all\n"
 }
 
+# ── fleet-shared files ──────────────────────────────────────────────────────
+# Some files must be byte-identical across every repo that has the module they
+# belong to, and until now "must be" meant "someone remembers to copy it".
+# Nobody did: deploy-dotfiles.sh had drifted in cloud-infra-desktop and was
+# absent in four repos that CALL it, and .mcp.json's own _doc conceded the hop
+# was manual. The registry now names those files (fleet_files) and this copies
+# them.
+#
+# The opt-in rule is the entry's `requires` directory, declared in the registry.
+# It is explicit rather than inferred, because the obvious inference — "copy
+# where the destination's parent directory exists" — is wrong for any
+# destination at the repo ROOT: the root always exists. That version of this
+# function put .mcp.json into all sixteen repos with no dotfiles module at all
+# (cloud-notes, cloud-u-linux, every lecole-42 entry) the first time it ran.
+# `requires` names the directory that PROVES the module is present, so a
+# root-level file is gated by the module it belongs to, not by its own path.
+#
+# A repo without that directory is not a repo that failed to get the file — it
+# is a repo the file does not belong in. Creating the path would invent a module.
+#
+# Copies only on DIFFERENCE, so a no-op sync touches no mtimes and leaves every
+# working tree clean — this is safe to run from the session-start hook.
+_ff_count() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write(String((r.fleet_files||[]).length))' "$REGISTRY"; }
+_ff_from()  { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write(r.fleet_files[+process.argv[2]].from)' "$REGISTRY" "$1"; }
+_ff_to()    { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write(r.fleet_files[+process.argv[2]].to.join(" "))' "$REGISTRY" "$1"; }
+_ff_req()   { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write(r.fleet_files[+process.argv[2]].requires||"")' "$REGISTRY" "$1"; }
+
+sync_all() {
+    n=$(_ff_count); i=0; copied=0; skipped=0
+    while [ "$i" -lt "$n" ]; do
+        src="$BASE/$(_ff_from "$i")"
+        dests=$(_ff_to "$i")
+        req=$(_ff_req "$i")
+        # An entry with no `requires` would silently degrade to "copy
+        # everywhere" — the exact bug described above. Refuse instead.
+        [ -n "$req" ] || { printf "  ! %-46s no 'requires' in registry — skipped\\n" "$(_ff_from "$i")"; i=$((i+1)); continue; }
+        if [ ! -f "$src" ]; then
+            # Not fatal, and deliberately so: a container that cloned only part
+            # of the fleet still gets every OTHER shared file. The absent source
+            # is named so it is obvious which clone is missing.
+            printf "  ! %-46s source absent — skipped\n" "$(_ff_from "$i")"
+            i=$((i+1)); continue
+        fi
+        printf "  = %s\n" "$(_ff_from "$i")"
+        # The index itself is a target too: it carries 0_apps/ and 9_others/
+        # like any other repo, and excluding it is how an index drifts from the
+        # fleet it indexes.
+        for repo_path in "$SCRIPT_DIR" $(for m in $(_names); do echo "$BASE/$(_path "$m")"; done); do
+            [ -d "$repo_path/.git" ] || continue
+            [ -d "$repo_path/$req" ] || { skipped=$((skipped+1)); continue; }
+            for d in $dests; do
+                dest="$repo_path/$d"
+                cmp -s "$src" "$dest" 2>/dev/null && continue
+                cp -f "$src" "$dest"
+                # Executability is part of the file: deploy-dotfiles.sh is
+                # invoked as `sh <path>` today, but a copy that silently loses
+                # +x breaks the moment anyone calls it directly.
+                [ -x "$src" ] && chmod +x "$dest"
+                copied=$((copied+1))
+                printf "      -> %s\n" "${repo_path#"$BASE"/}/$d"
+            done
+        done
+        i=$((i+1))
+    done
+    printf "\nsync: %d file(s) written, %d destination(s) skipped (module absent)\n" "$copied" "$skipped"
+    printf "sync: mcp.json is GENERATED — regenerate it in cloud-infra first if the\n"
+    printf "      service build.json .mcp blocks changed, then re-run --sync.\n"
+}
+
 case "${1:-}" in
     ""|-l|--list) do_list ;;
     --link)
@@ -142,6 +212,9 @@ case "${1:-}" in
             link_one "$n" && printf "  > %-24s %s -> %s\n" "$n" "${g:+$g/}$n" "$(_linktarget "$(_path "$n")" "$g")"
         done
         ;;
+    --sync)
+        sync_all
+        ;;
     --all)
         fail=0
         for n in $(_names); do clone_one "$n" || fail=$((fail+1)); done
@@ -152,7 +225,7 @@ case "${1:-}" in
         for n in $(_names); do [ "$(_field "$n" group)" = "$g" ] && clone_one "$n" || true; done
         ;;
     -h|--help)
-        sed -n '2,13p' "$0" | sed 's/^# \?//'
+        sed -n '2,14p' "$0" | sed 's/^# \?//'
         ;;
     *)
         for n in "$@"; do
