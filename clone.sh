@@ -12,10 +12,10 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 #
 # This repo is an INDEX, not a container. Clones live outside it (in
-# $CLOUD_GIT_BASE, default ~/git) and appear here as symlinks:
+# $CLOUD_GIT_BASE, default ~/cloud-drive-shared-store/git) and appear here as symlinks:
 #
-#     repo-master/a_cloud/cloud-infra-desktop ->  ~/git/cloud-infra-desktop
-#     repo-master/d_lecole/back-Algo ->  ~/git/lecole-42/back-Algo   (`path`)
+#     repo-master/a_cloud/cloud-infra-desktop ->  ~/cloud-drive-shared-store/git/cloud-infra-desktop
+#     repo-master/d_lecole/back-Algo ->  ~/cloud-drive-shared-store/git/lecole-42/back-Algo   (`path`)
 #
 # Every repo in the registry has a link, committed, whether or not you have
 # cloned it. A link to a repo you do not have dangles — that is the index
@@ -33,7 +33,7 @@ set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REGISTRY="$SCRIPT_DIR/repos.json"
-BASE="${CLOUD_GIT_BASE:-$HOME/git}"
+BASE="${CLOUD_GIT_BASE:-$HOME/cloud-drive-shared-store/git}"
 
 [ -f "$REGISTRY" ] || { echo "FATAL: $REGISTRY missing" >&2; exit 1; }
 command -v node >/dev/null 2>&1 || { echo "FATAL: node required to read $REGISTRY" >&2; exit 1; }
@@ -47,7 +47,7 @@ _field() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1
 # emitted as the sentinel "." and translated back at the point of use.
 _groups() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write([...new Set(r.repos.map(x=>x.group||"."))].sort().join(" "))' "$REGISTRY"; }
 # Where the clone actually lives under $BASE. Defaults to the repo name; the
-# d_lecole entries override it because those clones sit in ~/git/lecole-42/.
+# d_lecole entries override it because those clones sit in ~/cloud-drive-shared-store/git/lecole-42/.
 # Without this the only way to index them would be to move them, which is a
 # separate decision from indexing them.
 _path() { node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));const e=r.repos.find(x=>x.name===process.argv[2]);process.stdout.write(e&&e.path?e.path:process.argv[2])' "$REGISTRY" "$1"; }
@@ -67,7 +67,7 @@ _linktarget() { [ -n "$2" ] && printf '../../%s' "$1" || printf '../%s' "$1"; }
 # so a committed /home/diego/git/cloud-infra-desktop resolves on exactly one machine and
 # dangles everywhere else — the same failure .mcp.json had as a link to
 # /home/diego/.mcp.json. Relative has no such dependency: clone the repos as
-# siblings anywhere ($CLOUD_GIT_BASE, ~/git, /srv, a container) and every link
+# siblings anywhere ($CLOUD_GIT_BASE, ~/cloud-drive-shared-store/git, /srv, a container) and every link
 # resolves.
 link_one() {
     _n="$1"; _g=$(_field "$_n" group); _pp=$(_path "$_n")

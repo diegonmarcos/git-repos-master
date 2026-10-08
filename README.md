@@ -10,7 +10,7 @@ this repo; it is the index, so it has no entry pointing at itself.
 | `a_cloud` | the cloud project: infra, services, data, devices, tooling |
 | `b_front` | the front-end: site, content, assets, experiments |
 | `c_gh` | account-level GitHub repos (the profile README) |
-| `d_lecole` | 42 coursework — clones sit in `~/git/lecole-42/`, see `path` in `repos.json` |
+| `d_lecole` | 42 coursework — clones sit in `~/cloud-drive-shared-store/git/lecole-42/`, see `path` in `repos.json` |
 
 ```
 ./clone.sh                        # what exists here, what does not
