@@ -38,6 +38,24 @@
       "to": ["9_others/src/deploy-dotfiles.sh"],
       "requires": "9_others/src",
       "doc": "THE shared dotfiles deploy implementation. Every repo's 9_others/build.sh calls `sh $SCRIPT_DIR/src/deploy-dotfiles.sh` — including four that did not ship the file at all, so their dotfiles verb failed. cloud-infra is the source because it is the only repo whose copy is exercised end-to-end (it alone runs the derive refresh path inside it)."
+    },
+    {
+      "from": "cloud-infra/0_apps/src/claude/settings.json",
+      "to": ["ac_cloud-vault/.claude/settings.json"],
+      "requires": "ac_cloud-vault/.claude",
+      "doc": "cloud-u-android/ac_cloud-vault: a bare .claude/settings.json, no module around it. Nested module copy of the project settings: a sub-project directory that carries its own copy of the module (or just the file) because it is worked on from its own directory, where the repo-root .claude/ is not the one Claude Code loads. Not covered by the repo-root entry above (its `requires` and paths are root-relative), so it was never refreshed and drifted: ac_cloud-vault, da_dtk and others/ all lacked autoMode and the 2026-10-09 rules. The test-claude-sot.sh settings-verbatim check lists these same paths."
+    },
+    {
+      "from": "cloud-infra/0_apps/src/claude/settings.json",
+      "to": ["da_dtk/0_apps/src/claude/settings.json", "da_dtk/0_apps/dist/dotfiles/claude/settings.json", "da_dtk/.claude/settings.json"],
+      "requires": "da_dtk/0_apps/src/claude",
+      "doc": "cloud-u-linux/da_dtk: carries its own 0_apps module (src, dist and the deployed .claude). Nested module copy of the project settings: a sub-project directory that carries its own copy of the module (or just the file) because it is worked on from its own directory, where the repo-root .claude/ is not the one Claude Code loads. Not covered by the repo-root entry above (its `requires` and paths are root-relative), so it was never refreshed and drifted: ac_cloud-vault, da_dtk and others/ all lacked autoMode and the 2026-10-09 rules. The test-claude-sot.sh settings-verbatim check lists these same paths."
+    },
+    {
+      "from": "cloud-infra/0_apps/src/claude/settings.json",
+      "to": ["others/0_apps/src/claude/settings.json", "others/0_apps/dist/dotfiles/claude/settings.json"],
+      "requires": "others/0_apps/src/claude",
+      "doc": "cloud-me_vault/others: a vendored copy of the cloud module (src and dist; no deployed .claude). Nested module copy of the project settings: a sub-project directory that carries its own copy of the module (or just the file) because it is worked on from its own directory, where the repo-root .claude/ is not the one Claude Code loads. Not covered by the repo-root entry above (its `requires` and paths are root-relative), so it was never refreshed and drifted: ac_cloud-vault, da_dtk and others/ all lacked autoMode and the 2026-10-09 rules. The test-claude-sot.sh settings-verbatim check lists these same paths."
     }
   ],
 
